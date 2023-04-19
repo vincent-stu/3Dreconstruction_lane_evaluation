@@ -3,6 +3,8 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import warnings
+warnings.simplefilter('ignore', np.RankWarning)
 
 def calc_point_distance(pt1, pt2):
     # 计算两点之间的距离
@@ -143,18 +145,18 @@ def eval_lanes(ds_dir, gt_dir, save_dir, m):
         plt.title("Lane {} Comparison".format(i))
         plt.legend()
 
-        #plt.savefig(save_dir + "baiozhu_lane{}_evaluation.jpg".format(i), dpi=600)
+        plt.savefig(save_dir + "lane{}_evaluation.jpg".format(i), dpi=600)
+        
+        print("车道线{}的精度(m): ".format(i), round(np.mean(dist), 4))
         plt.show()
-        print("车道线{}的精度(m): ".format(i), sum(dist) / len(dist))
-
         
 if __name__ == '__main__':
-    save_dir ='/root/vincent/Scenerf/scenerf_result_json/00046/'
-    pred_path = '/root/vincent/Scenerf/scenerf_result_json/00046/lane_ds_00046.json'
-    #gt_path = '/root/vincent/Scenerf/scenerf_result_json/00046/lane_gt_00046.json'
-    gt_path = '/root/vincent/Scenerf/scenerf_result_json/00046/lane_00046_biaozhu.json'
+    save_dir ='/root/vincent/Scenerf/scenerf_result_json/00006/'
+    pred_path = '/root/vincent/Scenerf/scenerf_result_json/00006/lane_ds_00006.json'
+    gt_path = '/root/vincent/Scenerf/scenerf_result_json/00006/lane_gt_00006.json'
+    #gt_path = '/root/vincent/Scenerf/scenerf_result_json/00048/lane_00048_biaozhu.json'
 
     #雷达点云做参考进行评估时，由于数据量比较多，可以选择高阶的多项式进行拟合(例如：4)。
     #而当采用人工标注作为参考进行评估时，由于数据量比较少，并且由于车道线大部分情况下可近似为直线，因此应该选择低阶的多项式进行拟合(例如：1)。
+    #用于拟合的多项式次数m依据情况而灵活选择
     eval_lanes(pred_path, gt_path, save_dir, 1)     
-
